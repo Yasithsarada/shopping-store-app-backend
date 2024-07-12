@@ -1,9 +1,18 @@
 const express = require("express");
-const { addProduct, getProduct, getCategoryProducts } = require("../controller/product");
-const { uploadFile, upload , uploadFileNew} = require("../controller/upload-files");
+const {
+  addProduct,
+  getProduct,
+  getCategoryProducts,
+  getAllProducts,
+} = require("../controller/product");
+const {
+  uploadFile,
+  upload,
+  uploadFileNew,
+  rollBackUploads,
+} = require("../controller/upload-files");
 // const {  uploadFile, upload } = require("../controller/upload-files");
 const router = express.Router();
-
 
 // const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 // const multer = require('multer');
@@ -20,7 +29,7 @@ const router = express.Router();
 
 // const upload = multer({
 //     storage: multerS3({
-        
+
 //         acl : 'public-read',
 //         s3: client,
 //         bucket: bucket,
@@ -32,7 +41,7 @@ const router = express.Router();
 //         key: function (req, file, cb) {
 //             cb(null, file.originalname);
 //         },
-        
+
 //     }),
 //     fileFilter : function (req, file, cb) {
 //         // Check if the file's MIME type is image/jpeg or image/png
@@ -46,28 +55,28 @@ const router = express.Router();
 //     }
 // });
 
-
-
-
-
-
-
-router.post("/addProduct",  upload.array('images', 5) , addProduct);
+// router.post("/addProduct",  upload.array('images', 5) , addProduct);
+router.post("/addProduct", addProduct);
 router.get("/Product/:id", getProduct);
-
+router.post("/test", (req, res) => {
+  console.log("holaa!");
+});
 
 router.get("/category-products/:categoryId", getCategoryProducts);
-router.put("/check",  upload.array('images', 5) 
-, async (req, res) => {
-        const url = [];
-        req.files.forEach((file) => {
-                url.push(file);
-              });
-        
-            // console.log(url);
-            res.send({url : url});
-        }
-    );
-    
-    router.get("/getUrl", uploadFileNew);
+router.get("/all-products", getAllProducts);
+// router.put("/check",  upload.array('images', 5)
+// , async (req, res) => {
+//         const url = [];
+//         req.files.forEach((file) => {
+//                 url.push(file);
+//               });
+
+//             // console.log(url);
+//             res.send({url : url});
+//         }
+//     );
+
+router.get("/getUrl", uploadFileNew);
+router.post("/rollBackUploads", rollBackUploads);
+
 module.exports = router;

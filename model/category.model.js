@@ -31,6 +31,19 @@ const categorySchema = mongoose.Schema({
   },
 });
 
+
+// Define a virtual property for subcategories
+categorySchema.virtual('subcategories', {
+  ref: 'Category',
+  localField: '_id',
+  foreignField: 'category',
+});
+
+// Ensure virtual fields are included in JSON and Object output
+categorySchema.set('toObject', { virtuals: true });
+categorySchema.set('toJSON', { virtuals: true });
+
+
 const Category = mongoose.model("Category", categorySchema);
 
 module.exports = Category;

@@ -1,0 +1,13 @@
+{
+    "web": {
+        "client_id": "31068892727-2r3h52e13t3dbfiln7n2csp3g2dsqhj3.apps.googleusercontent.com",
+        "project_id": "shopping-stroe",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "http://localhost:4000/oauth2/redirect/google"
+        ]
+    }
+}

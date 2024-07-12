@@ -12,6 +12,15 @@ const createCategory = asyncHandler(async(req, res ) => {
 
 });
 
+const getCategoriesWithSubcategories = asyncHandler(async(req, res) => {
+    console.log("getttttttttttttttttttttttt")
+    const categories = await Category.find({ category: null }).populate('subcategories');
+    if (!categories) return res.status(404).json({ message: "No categories found" });
+    return res.status(200).json({ categories });
+});
+
+
 module.exports = {
-    createCategory
+    createCategory,
+    getCategoriesWithSubcategories
 }

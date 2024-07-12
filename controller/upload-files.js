@@ -66,7 +66,7 @@
 
 
 
-const { S3Client, PutObjectCommand , PutObjectCommandInput } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand , PutObjectCommandInput, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const bucket = process.env.AWS_BUCKET_NAME;
@@ -160,27 +160,54 @@ const uploadFileNew = async (req, res) => {
             accessKeyId: process.env.AWS_ACCESS_KEY,
             secretAccessKey: process.env.AWS_SECRET_KEY
         },
-        region: process.env.BUCKET_REGION
+        region: "ap-south-1",
+        
+        // region: process.env.BUCKET_REGION
     }
     
-    const imageName = crypto.randomBytes(64).toString("hex").substring(0, 10)
+    // const ex = (req.files).split('/')[1];
+    const ex = req.query.extension;
+    console.log("ex    : " , ex)
+    const imageName = `${crypto.randomBytes(64).toString("hex").substring(0, 10)}.${ex}`;
     console.log("imageName " + imageName)
     const clientConfig = new S3Client(S3ClientConfig);
+    
     // const command = new GetObjectCommand({Bucket : bucket , Key : imageName});
     
     console.log("Accesss key :"  + process.env.AWS_ACCESS_KEY);
     console.log("Secret key :"  + process.env.AWS_SECRET_KEY);
     console.log("BUcket :"  + bucket);
 
-    const command = new PutObjectCommand({Bucket : bucket , Key : imageName , ContentType : "image/jpg" ,Metadata: { 'Content-Type': "image/jpg" }});
-    const url = await getSignedUrl(clientConfig, command, { expiresIn: 3600 });
-    console.log("Pressigned url : " + url)
-    res.json({url : url})
-}
 
+    const command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: imageName,
+      ContentType: `image/${ex}`,
+    //   Metadata: { "Content-Type": "image/jpg" },
+      Metadata: { "Content-Type": `image/${ex}` },
+    });
+    const url = await getSignedUrl( clientConfig, command, { expiresIn: 3600 });
+    console.log("Pressigned url : " + url)
+    res.json({url : url , imagekey: imageName })
+}
+const rollBackUploads = async (req,res) => {
+    try {
+        const {imageKeys} = req.body;
+      for (const url of imageKeys) {
+        const bucketParams = { Bucket: bucket, Key: url };
+        const data = await client.send(new DeleteObjectCommand(bucketParams));
+        if(data.$metadata.httpStatusCode != 204) return res.status(400).json({"message": "Delete object failed"});
+        console.log("Success. Object deleted.", data.$metadata.httpStatusCode);
+      }
+      return "All objects deleted"; // For unit tests.
+    } catch (err) {
+      console.log("Error", err);
+    }
+  };
+  
 
 module.exports = {
     upload,
     // uploadFile,
-    uploadFileNew,
+    uploadFileNew,rollBackUploads
 };

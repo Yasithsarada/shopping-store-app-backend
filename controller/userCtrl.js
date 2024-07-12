@@ -12,14 +12,15 @@ const signUpUser = asyncHandler(async (req, res) => {
     console.log(email);
     console.log(password);
     console.log(username);
-    if (!username || !email || !password) return res.status(401).send({ message: "Please fill out all the fields!" });
+    // if (!username || !email || !password) return res.status(401).send({ message: "Please fill out all the fields!" });
+    if (!username || !email ) return res.status(401).send({ message: "Please fill out all the fields!" });
     console.log("1");
     if (!validateEmail(email)) {
       console.log("email returned");
        return res.status(400).json("Enter valid email");
     }
 
-    if (password.length < 8) return res.status(401).send({ message: "Password should be a least 8 charctors long!" });
+    // if (password.length < 8) return res.status(401).send({ message: "Password should be a least 8 charctors long!" });
 
     const user = await User.findOne({ email });
 
@@ -32,6 +33,8 @@ const signUpUser = asyncHandler(async (req, res) => {
       username: username,
       email: email,
       password: hashedPassword,
+      googleId : "",
+      imageUrl: ""
     });
     if (!newUser)  return res.status(401).send({ message: "User not succeccessfully created !" });
     console.log("new user " +newUser)
@@ -84,6 +87,7 @@ console.log({ token, ...user._doc })
 });
 
 const isTokenAlive = asyncHandler(async (req, res) => {
+  console.log("here iisUserActive calledd")
   try {
     const token = req.header("x-auth-token");
     
@@ -113,6 +117,81 @@ const isTokenAlive = asyncHandler(async (req, res) => {
   }
 });
 
+
+//SIGN IN WITH GOOGLE
+const googleSignIn = asyncHandler(async (req, res) => {
+  try {
+    console.log("heyy");
+    const { username, email, password , googleId , imageUrl} = req.body;
+
+    console.log(email);
+    console.log(password);
+    console.log(username);
+    console.log(googleId);
+    console.log(imageUrl);
+    // if (!username || !email || !password) return res.status(401).send({ message: "Please fill out all the fields!" });
+    // if (!email ) return res.status(401).send({ message: "Please fill out all the fields!" });
+    console.log("1");
+    if (!validateEmail(email)) {
+      console.log("email returned");
+       return res.status(400).json("Enter valid email");
+    }
+
+    // if (password.length < 8) return res.status(401).send({ message: "Password should be a least 8 charctors long!" });
+
+    // const user = await User.findOne({ email });
+    const user = await User.findOne({googleId : googleId});
+
+    // if (user) return res.status(400).json("User already exists with this email");   //send the token
+    if (!user) {
+      const newUser = await User.create({
+        username: username,
+        email: email,
+        // password: hashedPassword,
+        googleId: googleId,
+        imageUrl : imageUrl
+      });
+      if (!newUser)  return res.status(401).send({ message: "User not created !" });
+      
+      const token = generateActivationToken(newUser._id);
+      console.log("new user " +newUser)
+     
+      if (!token)  return res.status(401).json({ message: "Something went wrong..Plaese try again !" });
+      console.log({ token, ...newUser._doc })
+      return res.status(200).json({ token, ...newUser._doc });
+    }   //send the token
+    
+
+    // const salt = await bcrypt.genSalt(12);
+    // const hashedPassword = await bcrypt.hash(password, salt);
+
+    // const newUser = await User.create({
+    //   username: username,
+    //   email: email,
+    //   // password: hashedPassword,
+    //   googleId: googleId,
+    //   imageUrl : imageUrl
+    // });
+    
+    // if (!newUser)  return res.status(401).send({ message: "User not created !" });
+    const token = generateActivationToken(user._id);
+    // console.log("new user " +newUser)
+    // if (newUser) return res.status(200).json({
+    //   user: newUser,
+        
+    //   });
+      if (!token) return res.status(401)
+          .json({ message: "Something went wrong..Plaese try again !" });
+  console.log({ token, ...user._doc })
+     return res.status(200).json({ token, ...user._doc });
+  } catch (error) {
+    // res.status(400).send({ message: "something went wrong" });
+    console.log(error);
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+
 const validateEmail = (email) => {
   console.log(
     "email validation :" +
@@ -138,4 +217,5 @@ module.exports = {
   signUpUser,
   signInUser,
   isTokenAlive,
+  googleSignIn
 };
