@@ -1,5 +1,5 @@
 const express = require("express");
-const { createCategory, getCategoriesWithSubcategories } = require("../controller/category");
+const { createCategory, getCategoriesWithSubcategories, getMainCategories } = require("../controller/category");
 const {
   getSubCategories,
 } = require("../controller/subCategory");
@@ -14,5 +14,6 @@ router.post("/all-sub-catogeries", getSubCategories);
 // router.post('/sub/subCat' , getSubCategoriesOneCategory);
 
 router.get("/all", getCategoriesWithSubcategories);
+router.get("/main-catogeries", getMainCategories);
 
 module.exports = router;

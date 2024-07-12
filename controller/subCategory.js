@@ -38,40 +38,124 @@ const getSubCategoriesOneCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// const getSubCategories = asyncHandler(async (req, res) => {
+//   // let subCategories = [];
+//   try {
+   
+//     const mainCategories = await Category.find({ category: null });
+//     // console.log(element._id)
+//     // const categoryID =;
+//     // await getSubCategories(categoryID);
+//     async function getSubCategories(categoryID) {
+//       let categories = [];
+//       const category = await Category.findById(categoryID).populate("category");
+//       const subCategories = await Category.find({
+//         category: categoryID,
+//       }).populate("category");
+//       for (const subcategory of subCategories) {
+//         const existCategory = await getSubCategories(subcategory._id);
+        
+//         if (existCategory) {
+//           categories.push(existCategory);
+//         }
+//         // console.log(subcategory);
+//       }
+      
+//       return {
+//         _id: category._id,
+//         name: category.name,
+//         children: categories,
+//       };
+//       // res.json(subCategories)
+//     }
+//     console.log(mainCategories[0]['_id'])
+//     for (const mainCategory in mainCategories) {
+//           if (Object.hasOwnProperty.call(mainCategories, mainCategory)) {
+//             // const element = mainCategories[mainCategory];
+//         let categoryhirechy = await getSubCategories(mainCategory._id);
+//         // console.log(categoryhirechy)
+//         if (!categoryhirechy) return res.status(400).send("error");
+//         res.status(200).json({ hirechy: categoryhirechy });
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+// const getSubCategories = asyncHandler(async (req, res) => {
+//   try {
+//     const mainCategories = await Category.find({ category: null });
+//     const getSubCategories = async (categoryID) => {
+//       let categories = [];
+//       const category = await Category.findById(categoryID).populate("category");
+//       const subCategories = await Category.find({ category: categoryID }).populate("category");
+//       for (const subcategory of subCategories) {
+//         const existCategory = await getSubCategories(subcategory._id);
+//         if (existCategory) {
+//           categories.push(existCategory);
+//         }
+//       }
+//       return {
+//         _id: category._id,
+//         name: category.name || "",
+//         children: categories,
+//       };
+//     };
+    
+//     let categoryHierarchy = [];
+//     for (const mainCategory of mainCategories) {
+//       const hierarchy = await getSubCategories(mainCategory._id);
+//       categoryHierarchy.push(hierarchy);
+//     }
+    
+//     if (!categoryHierarchy) return res.status(400).send("error");
+//     res.status(200).json({ hierarchy: categoryHierarchy });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
 const getSubCategories = asyncHandler(async (req, res) => {
-  const categoryId = "6617977025e75bc3c150fc38";
-  // let subCategories = [];
+  console.log('658888904666666666666666666666666666666666666666666666666666666')
   try {
-    async function getSubCategories(categoryID) {
+    const mainCategories = await Category.find({ category: null });
+
+    const getSubCategories = async (categoryID) => {
       let categories = [];
       const category = await Category.findById(categoryID).populate("category");
-      const subCategories = await Category.find({
-        category: categoryID,
-      }).populate("category");
+      const subCategories = await Category.find({ category: categoryID }).populate("category");
+
       for (const subcategory of subCategories) {
         const existCategory = await getSubCategories(subcategory._id);
-
         if (existCategory) {
           categories.push(existCategory);
         }
-        // console.log(subcategory);
       }
 
       return {
-        _id: category._id,
-        name: category.name,
+        _id: category?._id,
+        name: category?.name || "",
         children: categories,
       };
-      // res.json(subCategories)
+    };
+
+    let categoryHierarchy = [];
+    for (const mainCategory of mainCategories) {
+      const hierarchy = await getSubCategories(mainCategory._id);
+      categoryHierarchy.push(hierarchy);
     }
-    let categoryhirechy = await getSubCategories(categoryId);
-    // console.log(categoryhirechy)
-    if (!categoryhirechy) return res.status(400).send("error");
-    res.status(200).json({ hirechy: categoryhirechy });
+
+    if (!categoryHierarchy) return res.status(400).send("error");
+    res.status(200).json({ hierarchy: categoryHierarchy });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 });
+
 
 module.exports = {
   getSubCategoryWithCategory,
