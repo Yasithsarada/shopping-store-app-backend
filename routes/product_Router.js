@@ -4,6 +4,8 @@ const {
   getProduct,
   getCategoryProducts,
   getAllProducts,
+  searchProducts,
+  updateProduct,
 } = require("../controller/product");
 const {
   uploadFile,
@@ -11,6 +13,7 @@ const {
   uploadFileNew,
   rollBackUploads,
 } = require("../controller/upload-files");
+const { createReview } = require("../controller/review");
 // const {  uploadFile, upload } = require("../controller/upload-files");
 const router = express.Router();
 
@@ -57,13 +60,18 @@ const router = express.Router();
 
 // router.post("/addProduct",  upload.array('images', 5) , addProduct);
 router.post("/addProduct", addProduct);
-router.get("/Product/:id", getProduct);
+router.post("/updateProduct", updateProduct);
+router.get("/Product", getProduct);
 router.post("/test", (req, res) => {
   console.log("holaa!");
 });
 
 router.get("/category-products/:categoryId", getCategoryProducts);
+router.get("/search-product", searchProducts);
 router.get("/all-products", getAllProducts);
+
+
+router.post("/rate-product", createReview);
 // router.put("/check",  upload.array('images', 5)
 // , async (req, res) => {
 //         const url = [];

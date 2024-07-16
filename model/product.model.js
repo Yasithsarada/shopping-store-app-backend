@@ -14,7 +14,7 @@ const productSchema = mongoose.Schema({
   price: {
     type: String,
     trim: true,
-    required: [true, "Please add a product Description"],
+    required: [true, "Please add a price for the product"],
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +49,10 @@ const productSchema = mongoose.Schema({
     required: [true, "Please add a product Description"],
     maxlength: 2000,
   },
+  averageRating : {   
+    type: Number,
+    
+  }
 });
 
 const Product = mongoose.model("Product", productSchema);
