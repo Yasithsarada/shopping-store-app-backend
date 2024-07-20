@@ -52,7 +52,15 @@ const productSchema = mongoose.Schema({
   averageRating : {   
     type: Number,
     
-  }
+  },
+  sizesAndColors: [
+    {
+      color: { type: String },
+      size: { type: String },
+      quantity: { type: Number },
+      images: { type: Array }
+    }
+  ]
 });
 
 const Product = mongoose.model("Product", productSchema);

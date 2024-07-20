@@ -8,7 +8,7 @@ exports.addProduct = asyncHandler(async (req, res) => {
   console.log('At least came ')
   console.log(req.body)
   try {
-    const { title, price, category, quantity,  description  , images  } = req.body;
+    const { title, price, category, quantity,  description  , images , sizesAndColors } = req.body;
   //   if (!req.files || req.files.length === 0) {
   //     console.log("No files uploaded")
   //     return res.status(400).send({ message: 'No files uploaded.' });
@@ -29,6 +29,8 @@ exports.addProduct = asyncHandler(async (req, res) => {
   console.log(quantity)
   console.log(images)
   console.log(description)
+  console.log(sizesAndColors)
+  
     const newProduct = await Product.create({
       title: title,
       price: price,
@@ -37,7 +39,8 @@ exports.addProduct = asyncHandler(async (req, res) => {
       quantity: quantity,
       images: images,
       description: description,
-      averageRating :5.0
+      averageRating :5.0,
+      sizesAndColors:sizesAndColors
     });
     if (!newProduct)
       return res.status(400).json({ message: "Product not added..Try again !" });
