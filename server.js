@@ -21,7 +21,7 @@ const Post = require("./model/post");
 app.use("/api/products", productRouter);
 app.use("/api/auth", userRoute);
 app.use("/api/category", categoryRouter);
-//
+
 // async function executeQuery() {
 //   await dbConnect();
 //   try {
