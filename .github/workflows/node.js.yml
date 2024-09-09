@@ -32,9 +32,10 @@ jobs:
         touch .env
         echo "${{ secrets.MONGO_DB_URL }}" > .env
         echo "${{ secrets.JWT_SECRET_ACTIVATION_KEY }}" > .env
-        echo "${{ secrets.BUCKET_REGION }}" > .env
-        echo "${{ secrets.AWS_SECRET_KEY }}" > .env
         echo "${{ secrets.AWS_BUCKET_NAME }}" > .env
+        echo "${{ secrets.BUCKET_REGION }}" > .env
         echo "${{ secrets.AWS_ACCESS_KEY }}" > .env
+        echo "${{ secrets.AWS_SECRET_KEY }}" > .env
+        
         
                 
