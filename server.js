@@ -80,7 +80,7 @@ app.get("/:posts/:slug", async (req, res) => {
 });
 
 mongoose
-  .connect(process.env.MONGO_DB_URL)
+  .connect(process.env.MONGO_DB_URL2)
   .then(() => console.log("Database connecteed"));
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
