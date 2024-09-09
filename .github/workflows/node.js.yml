@@ -36,6 +36,3 @@ jobs:
         echo "${{ secrets.BUCKET_REGION }}" > .env
         echo "${{ secrets.AWS_ACCESS_KEY }}" > .env
         echo "${{ secrets.AWS_SECRET_KEY }}" > .env
-        
-        
-                
