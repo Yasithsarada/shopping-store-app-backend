@@ -5,7 +5,7 @@ const crypto = require("crypto");
 // const slug = require('mongoose-slug-generator');
 //Initialize
 // mongoose.plugin(slug);
-
+//
 const postSchema = mongoose.Schema({
   title: String,
   body: String,
