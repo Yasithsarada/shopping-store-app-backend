@@ -30,8 +30,7 @@ jobs:
     - run: npm run build --if-present
     - run: |
         touch .env
-        echo "${{ secrets.MONGO_DB_URL }}" | sed 's/./& /g'
-        echo "${{ secrets.HELLO_VAR }}" > .env
+        echo MONGO_DB_PASSWORD=${{ secrets.MONGO_DB_PASSWORD }} >> .env
         echo JWT_SECRET_ACTIVATION_KEY=${{ secrets.JWT_SECRET_ACTIVATION_KEY }} >> .env
         echo AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }} >> .env
         echo BUCKET_REGION=${{ secrets.BUCKET_REGION }} >> .env
