@@ -62,8 +62,9 @@ const router = express.Router();
 router.post("/addProduct", addProduct);
 router.post("/updateProduct", updateProduct);
 router.get("/Product", getProduct);
-router.post("/test", (req, res) => {
+router.get("/test", (req, res) => {
   console.log("holaa!");
+  res.status(200).json({message : "It's working" })
 });
 
 router.get("/category-products/:categoryId", getCategoryProducts);
