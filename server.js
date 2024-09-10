@@ -9,6 +9,8 @@ const sql = require("mssql");
 // const crypto = require("crypto");
 const mongoose = require("mongoose");
 require("dotenv").config();
+MONGO_DB_URL = `mongodb+srv://wkabeyratne0:${process.env.MONGO_DB_PASSWORD}@cluster0.t5fimht.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+
 
 app.use(express.json());
 app.use(cors());
@@ -80,7 +82,7 @@ app.get("/:posts/:slug", async (req, res) => {
 });
 
 mongoose
-  .connect(process.env.DB_URL)
+  .connect(process.env.MONGO_DB_URL)
   .then(() => console.log("Database connecteed"));
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
