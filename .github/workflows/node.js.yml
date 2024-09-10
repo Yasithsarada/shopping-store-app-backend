@@ -36,4 +36,3 @@ jobs:
         echo BUCKET_REGION=${{ secrets.BUCKET_REGION }} >> .env
         echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> .env
         echo AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} >> .env
-    - run: pm2 restart api
